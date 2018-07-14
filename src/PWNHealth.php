@@ -1,32 +1,56 @@
 <?php namespace AliasProject\PWNHealth;
 
+use SimpleXMLElement;
+use Log;
+
 class PWNHealth
 {
-    CONST CLIENT_ENDPOINT = 'https://api16-staging.pwnhealth.com/';
+    const CLIENT_ENDPOINT = 'https://api16-staging.pwnhealth.com/';
     const LAB_ENDPOINT = 'https://api13-staging.pwnhealth.com/';
 
-    public function __construct()
+    private $username;
+    private $password;
+
+    public function __construct($username, $password)
     {
-        try {
-            
-        } catch (Exception $e) {
-            Log::error($e->getMessage());
-            return false;
-        }
+        $this->username = config('pwnhealth.username');
+        $this->password = config('pwnhealth.password');
     }
 
-    public function createOrder(string $first_name, string $last_name, int $dob, string $gender, string $email, string $address, string $city, string $state, int $zip, string $work_phone, array $test_types, bool $take_tests_same_day)
+    /**
+     * Create new order
+     *
+     * @param string $first_name
+     * @param string $last_name
+     * @param string $dob
+     * @param string $gender
+     * @param string $email
+     * @param string $address
+     * @param string $city
+     * @param string $state
+     * @param int $zip
+     * @param string $work_phone
+     * @param array $test_types
+     * @param bool $take_tests_same_day
+     * @return \Illuminate\Http\Response
+     */
+    public function createOrder(string $first_name, string $last_name, string $dob, string $gender, string $email, string $address, string $city, string $state, int $zip, string $work_phone, array $test_types, bool $take_tests_same_day)
     {
         // Set Headers
         $headers = ['Content-Type: application/xml'];
 
-        // Make request
+        // Format DOB
+        $dob = date('Ymd', strtotime($dob));
+
+        // Generate XML
         $customerXml = $this->generateCustomerXML($first_name, $last_name, $dob, $gender, $email, $address, $city, $state, $zip, $work_phone, $test_types, $take_tests_same_day);
-        $createCustomer = makeRequest(self::CLIENT_ENDPOINT . '/customers', $data, $headers, true);
+
+        // Make request
+        $createCustomer = $this->makeRequest(self::CLIENT_ENDPOINT . '/customers', (string) $customerXml, $headers, true);
 
         // Convert XML to JSON
-        Log::info($createCustomer);
-        dd('f');
+        $xml = simplexml_load_string($createCustomer);
+        $json = json_encode($xml);
 
         // Return Results
         return json_decode($json, TRUE);
@@ -58,7 +82,7 @@ class PWNHealth
         return json_decode($json, TRUE);
     }
 
-    public function getTestTypes(int $lab_id='')
+    public function getRegisteredLabs(int $lab_id)
     {
         // Make request
         $test_types = makeRequest(self::CLIENT_ENDPOINT . '/registered_labs?lab_id=' . $lab_id);
@@ -71,7 +95,7 @@ class PWNHealth
         return json_decode($json, TRUE);
     }
 
-    public function getTestTypes(int $lab_id='')
+    public function getTestTypes(int $lab_id)
     {
         // Make request
         $test_types = makeRequest(self::CLIENT_ENDPOINT . '/test_types?lab_id=' . $lab_id);
@@ -84,7 +108,7 @@ class PWNHealth
         return json_decode($json, TRUE);
     }
 
-    public function getTestGroups(int $lab_id='', int $account_number='', string $name='')
+    public function getTestGroups(int $lab_id, int $account_number, string $name='')
     {
         // Make request
         $test_types = makeRequest(self::CLIENT_ENDPOINT . '/test_groups?lab_id=' . $lab_id . '&account_number=' . $account_number . 'name=' . $name);
@@ -115,10 +139,8 @@ class PWNHealth
         $xml->addChild('take_tests_same_day', $take_tests_same_day);
 
         //Header('Content-type: application/xml');
-        return $xml->asXML()
+        return $xml->asXML();
     }
-
-
 
     /**
          * Make HTTP Request
@@ -128,11 +150,14 @@ class PWNHealth
          */
         function makeRequest(string $url, string $data='', array $headers=[], bool $post=false)
         {
+            Log::info($data);
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_URL, $url);
             curl_setopt($ch, CURLOPT_POST, $post);
+            curl_setopt($ch, CURLOPT_USERPWD, $this->username . ":" . $this->password);
             curl_setopt($ch, CURLOPT_USERAGENT, "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.13) Gecko/20080311 Firefox/2.0.0.13");
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 
             if ($post) {
                 curl_setopt($ch, CURLOPT_POSTFIELDS, $data);

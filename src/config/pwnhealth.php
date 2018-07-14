@@ -11,6 +11,6 @@ return [
     |
     */
 
-    'api_key' => env('PWNHEALTH_API_KEY'),
-    'api_token' => env('PWNHEALTH_API_TOKEN')
+    'username' => env('PWNHEALTH_USERNAME'),
+    'password' => env('PWNHEALTH_PASSWORD')
 ];
