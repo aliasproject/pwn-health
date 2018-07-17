@@ -11,7 +11,7 @@ class PWNHealth
     private $username;
     private $password;
 
-    public function __construct($username, $password)
+    public function __construct()
     {
         $this->username = config('pwnhealth.username');
         $this->password = config('pwnhealth.password');
