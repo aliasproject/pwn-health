@@ -121,6 +121,25 @@ class PWNHealth
         return json_decode($json, TRUE);
     }
 
+    /**
+     * Get Registered Labs to Account
+     *
+     * @param  string  $url
+     * @return string
+     */
+    function registeredLabs(string $url, string $data='', array $headers=[], bool $post=false)
+    {
+        // Make request
+        $response = makeRequest(self::CLIENT_ENDPOINT . '/registered_labs');
+
+        // Convert XML to JSON
+        $xml = simplexml_load_string($response);
+        $json = json_encode($xml);
+
+        // Return Results
+        return json_decode($json, TRUE);
+    }
+
     private function generateCustomerXML(string $first_name, string $last_name, int $dob, string $gender, string $email, string $address, string $city, string $state, int $zip, string $work_phone, array $test_types, bool $take_tests_same_day)
     {
         // Build XML
@@ -143,29 +162,28 @@ class PWNHealth
     }
 
     /**
-         * Make HTTP Request
-         *
-         * @param  string  $url
-         * @return string
-         */
-        function makeRequest(string $url, string $data='', array $headers=[], bool $post=false)
-        {
-            Log::info($data);
-            $ch = curl_init();
-            curl_setopt($ch, CURLOPT_URL, $url);
-            curl_setopt($ch, CURLOPT_POST, $post);
-            curl_setopt($ch, CURLOPT_USERPWD, $this->username . ":" . $this->password);
-            curl_setopt($ch, CURLOPT_USERAGENT, "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.13) Gecko/20080311 Firefox/2.0.0.13");
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+     * Make HTTP Request
+     *
+     * @param  string  $url
+     * @return string
+     */
+    private function makeRequest(string $url, string $data='', array $headers=[], bool $post=false)
+    {
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_POST, $post);
+        curl_setopt($ch, CURLOPT_USERPWD, $this->username . ":" . $this->password);
+        curl_setopt($ch, CURLOPT_USERAGENT, "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.13) Gecko/20080311 Firefox/2.0.0.13");
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 
-            if ($post) {
-                curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-            }
-
-            $result = curl_exec($ch);
-            curl_close($ch);
-
-            return $result;
+        if ($post) {
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
         }
+
+        $result = curl_exec($ch);
+        curl_close($ch);
+
+        return $result;
+    }
 }
