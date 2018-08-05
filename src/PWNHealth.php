@@ -124,13 +124,33 @@ class PWNHealth
     /**
      * Get Registered Labs to Account
      *
-     * @param  string  $url
      * @return string
      */
-    function registeredLabs(string $url, string $data='', array $headers=[], bool $post=false)
+    function registeredLabs()
     {
         // Make request
         $response = makeRequest(self::CLIENT_ENDPOINT . '/registered_labs');
+
+        // Convert XML to JSON
+        $xml = simplexml_load_string($response);
+        $json = json_encode($xml);
+
+        // Return Results
+        return json_decode($json, TRUE);
+    }
+
+    /**
+     * Get Registered Labs by Zip Code
+     *
+     * @param  integer  $zip
+     * @param  integer  $lab (Optional)
+     * @param  integer  $limit (Optional - Default: 10)
+     * @return string
+     */
+    function findPSC(int $zip, int $lab=NULL, int $limit=10)
+    {
+        // Make request
+        $response = makeRequest(self::CLIENT_ENDPOINT . '/find_psc/' . $zip . '?lab=' . $lab . '&limit=' . $limit);
 
         // Convert XML to JSON
         $xml = simplexml_load_string($response);
