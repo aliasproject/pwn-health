@@ -95,7 +95,7 @@ class PWNHealth
         return json_decode($json, TRUE);
     }
 
-    public function getTestTypes(int $lab_id=NULL)
+    public static function getTestTypes(int $lab_id=NULL)
     {
         // Make request
         $test_types = makeRequest(self::CLIENT_ENDPOINT . '/test_types?lab_id=' . $lab_id);
