@@ -59,7 +59,7 @@ class PWNHealth
     public function getOrders(string $status="all", $start_date, $end_date, int $page=0, int $per_page=10)
     {
         // Make request
-        $test_types = makeRequest(self::CLIENT_ENDPOINT . '/customers?status=' . $status . '&start_date=' . $start_date . '&end_date=' . $end_date . '&page=' . $page . '&per_page=' . $per_page);
+        $test_types = $this->makeRequest(self::CLIENT_ENDPOINT . '/customers?status=' . $status . '&start_date=' . $start_date . '&end_date=' . $end_date . '&page=' . $page . '&per_page=' . $per_page);
 
         // Convert XML to JSON
         $xml = simplexml_load_string($test_types);
@@ -72,7 +72,7 @@ class PWNHealth
     public function getOrderDetails(string $order_id, $include)
     {
         // Make request
-        $test_types = makeRequest(self::CLIENT_ENDPOINT . '/customers/' . $order_id . '?include=' . $include);
+        $test_types = $this->makeRequest(self::CLIENT_ENDPOINT . '/customers/' . $order_id . '?include=' . $include);
 
         // Convert XML to JSON
         $xml = simplexml_load_string($test_types);
@@ -85,7 +85,7 @@ class PWNHealth
     public function getRegisteredLabs(int $lab_id)
     {
         // Make request
-        $test_types = makeRequest(self::CLIENT_ENDPOINT . '/registered_labs?lab_id=' . $lab_id);
+        $test_types = $this->makeRequest(self::CLIENT_ENDPOINT . '/registered_labs?lab_id=' . $lab_id);
 
         // Convert XML to JSON
         $xml = simplexml_load_string($test_types);
@@ -95,10 +95,10 @@ class PWNHealth
         return json_decode($json, TRUE);
     }
 
-    public static function getTestTypes(int $lab_id=NULL)
+    public function getTestTypes(int $lab_id=NULL)
     {
         // Make request
-        $test_types = makeRequest(self::CLIENT_ENDPOINT . '/test_types?lab_id=' . $lab_id);
+        $test_types = $this->makeRequest(self::CLIENT_ENDPOINT . '/test_types?lab_id=' . $lab_id);
 
         // Convert XML to JSON
         $xml = simplexml_load_string($test_types);
@@ -111,7 +111,7 @@ class PWNHealth
     public function getTestGroups(int $lab_id, int $account_number, string $name='')
     {
         // Make request
-        $test_types = makeRequest(self::CLIENT_ENDPOINT . '/test_groups?lab_id=' . $lab_id . '&account_number=' . $account_number . 'name=' . $name);
+        $test_types = $this->makeRequest(self::CLIENT_ENDPOINT . '/test_groups?lab_id=' . $lab_id . '&account_number=' . $account_number . 'name=' . $name);
 
         // Convert XML to JSON
         $xml = simplexml_load_string($test_types);
@@ -129,7 +129,7 @@ class PWNHealth
     function registeredLabs()
     {
         // Make request
-        $response = makeRequest(self::CLIENT_ENDPOINT . '/registered_labs');
+        $response = $this->makeRequest(self::CLIENT_ENDPOINT . '/registered_labs');
 
         // Convert XML to JSON
         $xml = simplexml_load_string($response);
@@ -150,7 +150,7 @@ class PWNHealth
     function findPSC(int $zip, int $lab=NULL, int $limit=10)
     {
         // Make request
-        $response = makeRequest(self::CLIENT_ENDPOINT . '/find_psc/' . $zip . '?lab=' . $lab . '&limit=' . $limit);
+        $response = $this->makeRequest(self::CLIENT_ENDPOINT . '/find_psc/' . $zip . '?lab=' . $lab . '&limit=' . $limit);
 
         // Convert XML to JSON
         $xml = simplexml_load_string($response);
