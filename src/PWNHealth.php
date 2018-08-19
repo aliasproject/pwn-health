@@ -98,7 +98,7 @@ class PWNHealth
     public function getTestTypes(int $lab_id=NULL)
     {
         // Make request
-        $test_types = $this->makeRequest(self::CLIENT_ENDPOINT . '/test_types?lab_id=' . (($lab_id) ? '?lab_id=' . $lab_id : ''));
+        $test_types = $this->makeRequest(self::CLIENT_ENDPOINT . '/test_types' . (($lab_id) ? '?lab_id=' . $lab_id : ''));
 
         // Convert XML to JSON
         $xml = simplexml_load_string($test_types);
