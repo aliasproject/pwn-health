@@ -160,6 +160,55 @@ class PWNHealth
         return json_decode($json, TRUE);
     }
 
+    /**
+     * Get Requisition
+     *
+     * @param  integer  $requisition_id
+     * @return string
+     */
+    function getRequisition(int $requisition_id)
+    {
+        // Make request
+        $response = $this->makeRequest(self::CLIENT_ENDPOINT . '/customers/' . $requisition_id .'?include=requisition');
+
+        // Convert XML to JSON
+        $xml = simplexml_load_string($response);
+        $json = json_encode($xml);
+
+        // Return Results
+        return json_decode($json, TRUE);
+    }
+
+    /**
+     * Get Results
+     *
+     * @param  integer  $requisition_id
+     * @return string
+     */
+    function getResults(int $requisition_id)
+    {
+        // Make request
+        $response = $this->makeRequest(self::CLIENT_ENDPOINT . '/customers/' . $requisition_id .'?include=reconciled_results');
+
+        // Convert XML to JSON
+        $xml = simplexml_load_string($response);
+        $json = json_encode($xml);
+
+        // Return Results
+        return json_decode($json, TRUE);
+    }
+
+    /**
+     * Decode PDF
+     *
+     * @param  string  $pdf
+     * @return string
+     */
+    public function decodePDF(string $pdf)
+    {
+        return base64_decode($pdf);
+    }
+
     private function generateCustomerXML(string $first_name, string $last_name, int $dob, string $gender, string $email, string $address, string $city, string $state, int $zip, string $work_phone, array $test_types, bool $take_tests_same_day)
     {
         // Build XML
