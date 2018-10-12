@@ -13,9 +13,9 @@ class PWNHealth
     private $password;
     private $endpoint;
 
-    public function __construct(bool $staging=true)
+    public function __construct(bool $production=false)
     {
-        $this->endpoint = ($staging) ? self::CLIENT_ENDPOINT_STAGING : self::CLIENT_ENDPOINT;
+        $this->endpoint = ($production) ? self::CLIENT_ENDPOINT : self::CLIENT_ENDPOINT_STAGING;
         $this->username = config('pwnhealth.username');
         $this->password = config('pwnhealth.password');
     }
