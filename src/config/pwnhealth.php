@@ -11,6 +11,7 @@ return [
     |
     */
 
+    'env'      => env('APP_ENV'),
     'username' => env('PWNHEALTH_USERNAME'),
     'password' => env('PWNHEALTH_PASSWORD')
 ];
