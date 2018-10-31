@@ -1,7 +1,6 @@
 <?php namespace AliasProject\PWNHealth;
 
 use SimpleXMLElement;
-use Log;
 
 class PWNHealth
 {
@@ -47,7 +46,7 @@ class PWNHealth
 
         // Generate XML
         $customerXml = $this->generateCustomerXML($first_name, $last_name, $dob, $gender, $email, $address, $city, $state, $zip, $work_phone, $test_types, $test_groups, $take_tests_same_day);
-        Log::info($customerXml);
+
         // Make request
         $createCustomer = $this->makeRequest($this->endpoint . '/customers', (string) $customerXml, $headers, true);
 
