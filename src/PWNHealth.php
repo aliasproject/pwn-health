@@ -13,11 +13,18 @@ class PWNHealth
     private $password;
     private $endpoint;
 
-    public function __construct()
+    /**
+     * Create new instance
+     *
+     * @param string $username - API username
+     * @param string $password - API password
+     * @param string $env - production / staging
+     */
+    public function __construct(string $username, string $password, string $env = 'staging')
     {
-        $this->endpoint = (config('pwnhealth.env') === 'production') ? self::CLIENT_ENDPOINT : self::CLIENT_ENDPOINT_STAGING;
-        $this->username = config('pwnhealth.username');
-        $this->password = config('pwnhealth.password');
+        $this->endpoint = ($env === 'production') ? self::CLIENT_ENDPOINT : self::CLIENT_ENDPOINT_STAGING;
+        $this->username = $username;
+        $this->password = $password;
     }
 
     /**
