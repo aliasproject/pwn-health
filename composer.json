@@ -1,12 +1,12 @@
 {
-    "name": "aliasproject/pwnhealth",
+    "name": "aliasproject/pwn-health",
     "type": "library",
     "description": "Package to work with the PWNHealth API",
     "keywords": [
         "aliasproject",
         "pwnhealth"
     ],
-    "homepage": "https://bitbucket.com/aliasproject/pwnhealth",
+    "homepage": "https://github.com/aliasproject/pwn-health",
     "license": "MIT",
     "authors": [
         {
