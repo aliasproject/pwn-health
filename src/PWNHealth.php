@@ -39,12 +39,12 @@ class PWNHealth
      * @param string $city
      * @param string $state
      * @param int $zip
-     * @param string $work_phone
+     * @param string $home_phone
      * @param array $test_types
      * @param bool $take_tests_same_day
      * @return \Illuminate\Http\Response
      */
-    public function createOrder(string $first_name, string $last_name, string $dob, string $gender, string $email, string $address, string $city, string $state, int $zip, string $work_phone, array $test_types, bool $take_tests_same_day)
+    public function createOrder(string $first_name, string $last_name, string $dob, string $gender, string $email, string $address, string $city, string $state, int $zip, string $home_phone, array $test_types, array $test_groups, bool $take_tests_same_day=false)
     {
         // Set Headers
         $headers = ['Content-Type: application/xml'];
@@ -53,7 +53,7 @@ class PWNHealth
         $dob = date('Ymd', strtotime($dob));
 
         // Generate XML
-        $customerXml = $this->generateCustomerXML($first_name, $last_name, $dob, $gender, $email, $address, $city, $state, $zip, $work_phone, $test_types, $take_tests_same_day);
+        $customerXml = $this->generateCustomerXML($first_name, $last_name, $dob, $gender, $email, $address, $city, $state, $zip, $home_phone, $test_types, $test_groups, $take_tests_same_day);
 
         // Make request
         $createCustomer = $this->makeRequest($this->endpoint . '/customers', (string) $customerXml, $headers, true);
@@ -219,7 +219,7 @@ class PWNHealth
         return base64_decode($pdf);
     }
 
-    private function generateCustomerXML(string $first_name, string $last_name, int $dob, string $gender, string $email, string $address, string $city, string $state, int $zip, string $work_phone, array $test_types, bool $take_tests_same_day)
+    private function generateCustomerXML(string $first_name, string $last_name, int $dob, string $gender, string $email, string $address, string $city, string $state, int $zip, string $home_phone, array $test_types, array $test_groups, bool $take_tests_same_day)
     {
         // Build XML
         $xml = new SimpleXMLElement('<customer/>');
@@ -232,9 +232,19 @@ class PWNHealth
         $xml->addChild('city', $city);
         $xml->addChild('state', $state);
         $xml->addChild('zip', $zip);
-        $xml->addChild('work_phone', $work_phone);
-        $xml->addChild('test_types', implode(',', $test_types));
-        $xml->addChild('take_tests_same_day', $take_tests_same_day);
+        $xml->addChild('home_phone', $home_phone);
+
+        if (!empty($test_types)) {
+            $xml->addChild('test_types', implode(',', $test_types));
+        }
+
+        if (!empty($test_groups)) {
+            $xml->addChild('test_groups', implode(',', $test_groups));
+        }
+
+        if ($take_tests_same_day) {
+            $xml->addChild('take_tests_same_day', $take_tests_same_day);
+        }
 
         //Header('Content-type: application/xml');
         return $xml->asXML();
