@@ -176,7 +176,7 @@ class PWNHealth
      * @param  integer  $requisition_id
      * @return string
      */
-    public static function getRequisition(int $requisition_id)
+    public function getRequisition(int $requisition_id)
     {
         // Make request
         $response = $this->makeRequest($this->endpoint . '/customers/' . $requisition_id .'?include=requisition');
@@ -195,7 +195,7 @@ class PWNHealth
      * @param  integer  $requisition_id
      * @return string
      */
-    public static function getResults(int $requisition_id)
+    public function getResults(int $requisition_id)
     {
         // Make request
         $response = $this->makeRequest($this->endpoint . '/customers/' . $requisition_id .'?include=reconciled_results');
@@ -214,7 +214,7 @@ class PWNHealth
      * @param  string  $pdf
      * @return string
      */
-    public static function decodePDF(string $pdf)
+    public function decodePDF(string $pdf)
     {
         return base64_decode($pdf);
     }
