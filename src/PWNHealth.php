@@ -136,7 +136,7 @@ class PWNHealth
      *
      * @return string
      */
-    function registeredLabs()
+    public function registeredLabs()
     {
         // Make request
         $response = $this->makeRequest($this->endpoint . '/registered_labs');
@@ -157,7 +157,7 @@ class PWNHealth
      * @param  integer  $limit (Optional - Default: 10)
      * @return string
      */
-    function findPSC(int $zip, int $lab=NULL, int $limit=10)
+    public function findPSC(int $zip, int $lab=NULL, int $limit=10)
     {
         // Make request
         $response = $this->makeRequest($this->endpoint . '/find_psc/' . $zip . '?lab=' . $lab . '&limit=' . $limit);
@@ -176,7 +176,7 @@ class PWNHealth
      * @param  integer  $requisition_id
      * @return string
      */
-    function getRequisition(int $requisition_id)
+    public function getRequisition(int $requisition_id)
     {
         // Make request
         $response = $this->makeRequest($this->endpoint . '/customers/' . $requisition_id .'?include=requisition');
@@ -195,7 +195,7 @@ class PWNHealth
      * @param  integer  $requisition_id
      * @return string
      */
-    function getResults(int $requisition_id)
+    public static function getResults(int $requisition_id)
     {
         // Make request
         $response = $this->makeRequest($this->endpoint . '/customers/' . $requisition_id .'?include=reconciled_results');
@@ -214,7 +214,7 @@ class PWNHealth
      * @param  string  $pdf
      * @return string
      */
-    public function decodePDF(string $pdf)
+    public static function decodePDF(string $pdf)
     {
         return base64_decode($pdf);
     }
