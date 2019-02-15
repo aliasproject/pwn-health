@@ -176,7 +176,7 @@ class PWNHealth
      * @param  integer  $requisition_id
      * @return string
      */
-    public function getRequisition(int $requisition_id)
+    public static function getRequisition(int $requisition_id)
     {
         // Make request
         $response = $this->makeRequest($this->endpoint . '/customers/' . $requisition_id .'?include=requisition');
