@@ -44,7 +44,7 @@ class PWNHealth
      * @param bool $take_tests_same_day
      * @return \Illuminate\Http\Response
      */
-    public function createOrder(string $first_name, string $last_name, string $dob, string $gender, string $email, string $address, string $city, string $state, int $zip, string $home_phone, array $test_types, array $test_groups, bool $take_tests_same_day=false)
+    public function createOrder(string $first_name, string $last_name, string $dob, string $gender, string $email, string $address, string $city, string $state, string $zip, string $home_phone, array $test_types, array $test_groups, bool $take_tests_same_day=false)
     {
         // Set Headers
         $headers = ['Content-Type: application/xml'];
