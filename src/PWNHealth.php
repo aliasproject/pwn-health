@@ -198,7 +198,7 @@ class PWNHealth
     public function getResults(int $requisition_id)
     {
         // Make request
-        $response = $this->makeRequest($this->endpoint . '/customers/' . $requisition_id .'?include=reconciled_results');
+        $response = $this->makeRequest($this->endpoint . '/customers/' . $requisition_id .'?include=everything');
 
         // Convert XML to JSON
         $xml = simplexml_load_string($response);
