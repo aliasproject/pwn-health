@@ -38,7 +38,7 @@ class PWNHealth
      * @param string $address
      * @param string $city
      * @param string $state
-     * @param int $zip
+     * @param string $zip
      * @param string $home_phone
      * @param array $test_types
      * @param bool $take_tests_same_day
@@ -157,7 +157,7 @@ class PWNHealth
      * @param  integer  $limit (Optional - Default: 10)
      * @return string
      */
-    public function findPSC(int $zip, int $lab=NULL, int $limit=10)
+    public function findPSC(string $zip, int $lab=NULL, int $limit=10)
     {
         // Make request
         $response = $this->makeRequest($this->endpoint . '/find_psc/' . $zip . '?lab=' . $lab . '&limit=' . $limit);
@@ -219,7 +219,7 @@ class PWNHealth
         return base64_decode($pdf);
     }
 
-    private function generateCustomerXML(string $first_name, string $last_name, int $dob, string $gender, string $email, string $address, string $city, string $state, int $zip, string $home_phone, array $test_types, array $test_groups, bool $take_tests_same_day)
+    private function generateCustomerXML(string $first_name, string $last_name, int $dob, string $gender, string $email, string $address, string $city, string $state, string $zip, string $home_phone, array $test_types, array $test_groups, bool $take_tests_same_day)
     {
         // Build XML
         $xml = new SimpleXMLElement('<customer/>');
